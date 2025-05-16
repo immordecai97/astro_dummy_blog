@@ -1,5 +1,41 @@
 ---
+import Footer from "../components/Footer.astro";
+import Navigation from "../components/Navigation.astro";
+import "../styles/global.css";
+const pageTitle = "Sobre mí";
+interface Identity {
+	firstName: string;
+	country: string;
+	occupation: string;
+	hobbies: string[];
+}
 
+const identity: Identity = {
+	firstName: "Sarah",
+	country: "Canada",
+	occupation: "Escritor técnico",
+	hobbies: ["fotografía", "observación de aves", "peñarol"],
+};
+const skills: string[] = [
+	"HTML",
+	"CSS",
+	"JavaScript",
+	"React",
+	"Astro",
+	"Redacción de documentos",
+];
+
+const happy: boolean = true;
+const finished: boolean = false;
+const goal: number = 3;
+
+// Etiquetas dinámicas: Deben empezar por mayúsculas para que pueda ser interpretada como etiqueta HTML
+const ElementListItem = "li";
+
+// Variables para CSS (Se debe usar la directiva define:vars={} enla etiqueta <style>)
+const skillColor: string = "navy";
+const fontWeight: string = "bold";
+const textCase: string = "uppercase";
 ---
 
 <html lang="en">
@@ -8,13 +44,24 @@
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="viewport" content="width=device-width" />
 		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
+		<title>{pageTitle}</title>
+		<style define:vars={{ skillColor, fontWeight, textCase }}>
+			h1 {
+				color: purple;
+				font-size: 4rem;
+			}
+			.skill {
+				/* color: green; */
+				color: var(--skillColor);
+				font-weight: var(--fontWeight);
+				text-transform: var(--textCase);
+			}
+		</style>
 	</head>
 	<body>
-		<a href="/">Inicio</a>
-		<a href="/about/">Sobre mi</a>
-		<a href="/blog/">Blog</a>
-		<h1>Sobre mi</h1>
+		<Navigation />
+
+		<h1>{pageTitle}</h1>
 		<h2>... y mi nuevo sitio Astro</h2>
 		<p>
 			Estoy trabajando en el tutorial introductorio de Astro. Esta es la
@@ -27,5 +74,40 @@
 			partes del tutorial, ¡así que no dejes de visitarlo para ver cómo va
 			mi viaje!
 		</p>
+
+		<p>He aquí algunos datos sobre mí:</p>
+		<ul>
+			<ElementListItem>Me llamo {identity.firstName}.</ElementListItem>
+			<ElementListItem>
+				Vivo en {identity.country} y trabajo como {identity.occupation}.
+			</ElementListItem>
+			{
+				identity.hobbies.length >= 2 && (
+					<ElementListItem>
+						Dos de mis aficiones son: {identity.hobbies[0]} y{" "}
+						{identity.hobbies[1]}
+					</ElementListItem>
+				)
+			}
+		</ul>
+		<p>Mis habilidades son:</p>
+		<ul>
+			{
+				skills.map((skill) => (
+					<ElementListItem class="skill">{skill}</ElementListItem>
+				))
+			}
+		</ul>
+
+		{happy && <p>Estoy felíz de aprender astro!</p>}
+		{finished && <p>He terminado este tutorial</p>}
+		{
+			goal === 3 ? (
+				<p>Mi objetivo es terminar en 3 días</p>
+			) : (
+				<p>Mi objetivo no son 3 días</p>
+			)
+		}
+		<Footer />
 	</body>
 </html>
